@@ -310,12 +310,7 @@
   });
   let controller = {
     init: function() {
-      view.init(
-        this.getAllData(),
-        target,
-        this.miniControl,
-        controller.intersectionObserver
-      );
+      view.init(this.getAllData(), target, this.miniControl);
     },
     getAllData: function() {
       return model.getAllData();
@@ -345,8 +340,6 @@
           let changeBtn = parent.querySelector(".renameBtn");
           changeBtn.addEventListener("click", function() {
             model.rename(id, input.value);
-            //dropdownBtn.innerHTML = input.value;
-            //inputHolderDiv.classList = "d-none";
             controller.init();
           });
         });
@@ -375,13 +368,19 @@
           entires => {
             entires.forEach(entry => {
               if (entry.isIntersecting) {
-                $(`a[href='#${entry.target.id}']`)
-                  .addClass("navOpserver")
-                  .css("height", entry.target.clientHeight / 10);
+                document
+                  .querySelector(`a[href='#${entry.target.id}']`)
+                  .classList.add("navOpserver");
+                document.querySelector(
+                  `a[href='#${entry.target.id}']`
+                ).style.height = `${entry.target.clientHeight / 10}px`;
               } else {
-                $(`a[href='#${entry.target.id}']`)
-                  .removeClass("navOpserver")
-                  .css("height", entry.target.clientHeight / 10);
+                document
+                  .querySelector(`a[href='#${entry.target.id}']`)
+                  .classList.remove("navOpserver");
+                document.querySelector(
+                  `a[href='#${entry.target.id}']`
+                ).style.height = `${entry.target.clientHeight / 10}px`;
               }
             });
           },
