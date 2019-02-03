@@ -126,3 +126,10 @@ body {
   display: none;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
+
+@media (min-width: 576px) {
+  .modal-dialog {
+    max-width: 500px;
+    margin: 17.75rem auto;
+  }
+}
