@@ -46,9 +46,7 @@ describe("model list's", function() {
     model.addCard("list2", "text", "description");
     model.addCard("list2", "text", "description");
     model.addCard("list2", "text", "description");
-    console.log(model._lists[2]);
     model.removeCard("list3", "card2");
-    console.log(model._lists[2]);
   });
   it("Can  remove card", function() {
     assert.equal(model._lists.length, 0);
@@ -58,7 +56,8 @@ describe("model list's", function() {
     model.addCard("list1", "text", "description");
     model.addCard("list1", "text", "description");
     assert.equal(model._lists[1].listItems.length, 3);
-    model.removeCard("list1", "card2");
+    model.removeCard("list1", "list1card2");
+    console.log(model._lists[1]);
     assert.equal(model._lists[1].listItems.length, 2);
   });
 });
