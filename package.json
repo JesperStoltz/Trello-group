@@ -1,0 +1,29 @@
+{
+  "name": "trello-grupp1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "node_modules/.bin/rollup assets/js/src/Controller.js --file assets/js/bundle.js --format iife",
+    "test": "mocha --require @babel/register"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ultraemme/trello-grupp1.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ultraemme/trello-grupp1/issues"
+  },
+  "homepage": "https://github.com/ultraemme/trello-grupp1#readme",
+  "dependencies": {
+    "mocha": "^5.2.0",
+    "rollup": "^1.1.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-transform-modules-commonjs": "^7.2.0",
+    "@babel/register": "^7.0.0"
+  }
+}
