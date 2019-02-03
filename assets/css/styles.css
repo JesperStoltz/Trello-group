@@ -121,6 +121,10 @@ body {
   transform: rotate(-90deg);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
+li:hover .navOpserver + span {
+  transform: rotate(0deg);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
 .listSpan {
   font-size: 10px;
   display: none;

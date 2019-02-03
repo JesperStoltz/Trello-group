@@ -74,10 +74,11 @@
         "DOMContentLoaded",
         () => {
           const scroller = new SweetScroll({
-            easing: "easeInOutCubic",
+            easing: "easeOutCubic",
             vertical: false,
             preventDefault: false,
-            horizontal: true
+            horizontal: true,
+            offset: -200
           });
         },
         "#TodoListHolder"
