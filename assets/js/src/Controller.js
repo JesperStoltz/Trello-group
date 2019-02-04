@@ -9,9 +9,42 @@ addListBtn.addEventListener("click", function() {
 let controller = {
   init: function() {
     view.init(this.getAllData(), target, this.miniControl);
+    this.dragDropHandler();
   },
   getAllData: function() {
     return model.getAllData();
+  },
+  dragDropHandler: function() {
+    let selectedLi;
+    let listId;
+    let cardId;
+
+    let listGroupItem = Array.from(
+      document.querySelectorAll(".list-group-item")
+    );
+    listGroupItem.map(li => {
+      li.addEventListener("dragstart", function(e) {
+        selectedLi = e.target;
+        listId = model.getListId(e.target);
+        cardId = selectedLi.className.match(/list\d+card\d+/)[0];
+      });
+    });
+
+    let listItemUls = Array.from(document.querySelectorAll(".tcards"));
+    listItemUls.map(ul => {
+      ul.addEventListener("dragover", function(e) {
+        e.preventDefault();
+        console.log("valid drop-area");
+      });
+      ul.addEventListener("drop", function(e) {
+        model.moveExistingCard(
+          model.getListId(e.target),
+          model.getCardObj(cardId)
+        );
+        model.removeCard(listId, cardId);
+        controller.init();
+      });
+    });
   },
 
   miniControl: {

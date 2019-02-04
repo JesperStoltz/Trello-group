@@ -6,6 +6,9 @@ export default {
     document.getElementById("listNav").innerHTML = this.renderList(data);
     target.innerHTML = this.render(data);
     itemListView.init(data, target, miniControl);
+    miniControl.intersectionObserver(
+      document.querySelectorAll("#TodoListHolder .box")
+    );
   },
   render: function(data) {
     let htmlElement = "";

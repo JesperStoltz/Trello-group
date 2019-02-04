@@ -8,7 +8,6 @@ export default {
       miniControl.removeList(element.id);
       miniControl.renameList(element.id, element.name);
       miniControl.addCard(element.id, listItemTemp, element.listItemsId);
-      miniControl.intersectionObserver($(`#TodoListHolder .box`));
       element.listItems.forEach(listItem => {
         target
           .querySelector(`#${element.id}`)
