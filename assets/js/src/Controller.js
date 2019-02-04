@@ -42,11 +42,8 @@ let controller = {
         });
       });
     },
-    addCard: function(id, cb, cardId) {
+    addCard: function(id) {
       let cardHolderDiv = document.getElementById(`addCardBtn${id}`);
-      let cardHolderUlList = document
-        .getElementById(id)
-        .querySelector(`.list-group.tcards`);
       let textInput = document.getElementById(`textInput${id}`);
       let textDescription = document.getElementById(`textAreaInput${id}`);
       let addCardBtn = document
@@ -61,24 +58,36 @@ let controller = {
         controller.init();
       });
     },
+    removeCard: function(listId) {
+      [...document.querySelectorAll(".removeCard")].map(removeBtn => {
+        removeBtn.addEventListener("click", function() {
+          model.removeCard(listId, this.getAttribute("data-set"));
+          controller.init();
+        });
+      });
+    },
     intersectionObserver: function(t) {
       const observer = new IntersectionObserver(
         entires => {
           entires.forEach(entry => {
             if (entry.isIntersecting) {
-              document
-                .querySelector(`a[href='#${entry.target.id}']`)
-                .classList.add("navOpserver");
-              document.querySelector(
-                `a[href='#${entry.target.id}']`
-              ).style.height = `${entry.target.clientHeight / 10}px`;
+              if (document.querySelector(`a[href='#${entry.target.id}']`)) {
+                document
+                  .querySelector(`a[href='#${entry.target.id}']`)
+                  .classList.add("navOpserver");
+                document.querySelector(
+                  `a[href='#${entry.target.id}']`
+                ).style.height = `${entry.target.clientHeight / 10}px`;
+              }
             } else {
-              document
-                .querySelector(`a[href='#${entry.target.id}']`)
-                .classList.remove("navOpserver");
-              document.querySelector(
-                `a[href='#${entry.target.id}']`
-              ).style.height = `${entry.target.clientHeight / 10}px`;
+              if (document.querySelector(`a[href='#${entry.target.id}']`)) {
+                document
+                  .querySelector(`a[href='#${entry.target.id}']`)
+                  .classList.remove("navOpserver");
+                document.querySelector(
+                  `a[href='#${entry.target.id}']`
+                ).style.height = `${entry.target.clientHeight / 10}px`;
+              }
             }
           });
         },

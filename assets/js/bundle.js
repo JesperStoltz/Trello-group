@@ -112,7 +112,9 @@
                      <span class="dropdown-item rounded" data-toggle="modal" href="#" data-target="#${
                        data.id
                      }">Edit Labels</span>
-                     <span class="dropdown-item rounded" href="#">Remove Item</span>
+                     <span class="dropdown-item rounded removeCard" href="#" data-set="${
+                       data.id
+                     }">Remove Item</span>
                    </div>
 
                    <!--Dropdown List End-->
@@ -158,6 +160,7 @@
           target
             .querySelector(`#${element.id}`)
             .querySelector(`.tcards`).innerHTML += listItemTemp(listItem);
+          miniControl.removeCard(element.id);
         });
       });
     }
@@ -221,7 +224,7 @@
                         }" class="text-light">Text</label>
                         <input type="text" class="form-control" id="textInput${
                           data.id
-                        }" required>
+                        }" >
                           <div class="invalid-feedback">
                               Can't Add Empty Card.
                           </div>
@@ -344,11 +347,8 @@
           });
         });
       },
-      addCard: function(id, cb, cardId) {
+      addCard: function(id) {
         let cardHolderDiv = document.getElementById(`addCardBtn${id}`);
-        let cardHolderUlList = document
-          .getElementById(id)
-          .querySelector(`.list-group.tcards`);
         let textInput = document.getElementById(`textInput${id}`);
         let textDescription = document.getElementById(`textAreaInput${id}`);
         let addCardBtn = document
@@ -356,11 +356,19 @@
           .querySelector(`button[type="submit"]`);
         addCardBtn.addEventListener("click", function(e) {
           e.preventDefault();
-          model.addCard(id, textInput.value, textDescription.value);
+          model.addCard(id, "/" + textInput.value, textDescription.value);
           textInput.value = "";
           textDescription.value = "";
           cardHolderDiv.classList.remove(`show`);
           controller.init();
+        });
+      },
+      removeCard: function(listId) {
+        [...document.querySelectorAll(".removeCard")].map(removeBtn => {
+          removeBtn.addEventListener("click", function() {
+            model.removeCard(listId, this.getAttribute("data-set"));
+            controller.init();
+          });
         });
       },
       intersectionObserver: function(t) {
@@ -368,19 +376,23 @@
           entires => {
             entires.forEach(entry => {
               if (entry.isIntersecting) {
-                document
-                  .querySelector(`a[href='#${entry.target.id}']`)
-                  .classList.add("navOpserver");
-                document.querySelector(
-                  `a[href='#${entry.target.id}']`
-                ).style.height = `${entry.target.clientHeight / 10}px`;
+                if (document.querySelector(`a[href='#${entry.target.id}']`)) {
+                  document
+                    .querySelector(`a[href='#${entry.target.id}']`)
+                    .classList.add("navOpserver");
+                  document.querySelector(
+                    `a[href='#${entry.target.id}']`
+                  ).style.height = `${entry.target.clientHeight / 10}px`;
+                }
               } else {
-                document
-                  .querySelector(`a[href='#${entry.target.id}']`)
-                  .classList.remove("navOpserver");
-                document.querySelector(
-                  `a[href='#${entry.target.id}']`
-                ).style.height = `${entry.target.clientHeight / 10}px`;
+                if (document.querySelector(`a[href='#${entry.target.id}']`)) {
+                  document
+                    .querySelector(`a[href='#${entry.target.id}']`)
+                    .classList.remove("navOpserver");
+                  document.querySelector(
+                    `a[href='#${entry.target.id}']`
+                  ).style.height = `${entry.target.clientHeight / 10}px`;
+                }
               }
             });
           },

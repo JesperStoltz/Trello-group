@@ -21,7 +21,9 @@ export function listItemTemp(data) {
                      <span class="dropdown-item rounded" data-toggle="modal" href="#" data-target="#${
                        data.id
                      }">Edit Labels</span>
-                     <span class="dropdown-item rounded" href="#">Remove Item</span>
+                     <span class="dropdown-item rounded removeCard" href="#" data-set="${
+                       data.id
+                     }">Remove Item</span>
                    </div>
 
                    <!--Dropdown List End-->

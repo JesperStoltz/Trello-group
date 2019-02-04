@@ -13,6 +13,7 @@ export default {
         target
           .querySelector(`#${element.id}`)
           .querySelector(`.tcards`).innerHTML += listItemTemp(listItem);
+        miniControl.removeCard(element.id);
       });
     });
   }

@@ -56,7 +56,7 @@ export function listTemp(data) {
                         }" class="text-light">Text</label>
                         <input type="text" class="form-control" id="textInput${
                           data.id
-                        }" required>
+                        }" >
                           <div class="invalid-feedback">
                               Can't Add Empty Card.
                           </div>
