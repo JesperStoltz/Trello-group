@@ -3,7 +3,7 @@
 
   var model = {
     user: "userName",
-    id: 2,
+    id: 3,
     _lists: [
       {
         id: "list0",
@@ -20,7 +20,7 @@
           {
             id: "list0card1",
             text: "To-do 2",
-            itemDescription: "to-do 2 description !!",
+            itemDescription: "to-do 2 description",
             user: "user2",
             date: "12-12-2019"
           }
@@ -29,8 +29,44 @@
       {
         id: "list1",
         name: "Doing",
-        listItemsId: 0,
-        listItems: []
+        listItemsId: 2,
+        listItems: [
+          {
+            id: "list1card0",
+            text: "Doing 1",
+            itemDescription: "Doing 1 description",
+            user: "user 1",
+            date: "12-12-2019"
+          },
+          {
+            id: "list1card1",
+            text: "Doing 2",
+            itemDescription: "Doing 2 description !!",
+            user: "user 2",
+            date: "12-12-2019"
+          }
+        ]
+      },
+      {
+        id: "list2",
+        name: "Done",
+        listItemsId: 2,
+        listItems: [
+          {
+            id: "list2card0",
+            text: "Done 1",
+            itemDescription: "Done 1 description",
+            user: "user 1",
+            date: "12-12-2019"
+          },
+          {
+            id: "list2card1",
+            text: "Done 2",
+            itemDescription: "Done 2 description !!",
+            user: "user 2",
+            date: "12-12-2019"
+          }
+        ]
       }
     ],
     getAllData: function() {
@@ -62,6 +98,17 @@
         }
       });
     },
+    getCardObj: function(cardId) {
+      let obj;
+      this._lists.map(list => {
+        list.listItems.map(item => {
+          if (item.id === cardId) {
+            obj = item;
+          }
+        });
+      });
+      return obj;
+    },
     addCard: function(id, text, description) {
       return this._lists.filter(list => {
         if (list.id === id) {
@@ -76,22 +123,50 @@
         }
       });
     },
-    removeCard: function(listId, cardId) {
-      return this._lists.filter(list => {
-        if (list.id === listId) {
-          list.listItems.filter((item, index) => {
-            if (item.id === cardId) {
-              list.listItems.splice(index, 1);
-            }
-          });
+    moveExistingCard: function(id, obj) {
+      this._lists.map(list => {
+        if (list.id === id) {
+          list.listItems.push(obj);
         }
       });
+    },
+    removeCard: function(listId, cardId) {
+      //EMIL
+      for (let list of this._lists) {
+        if (listId === list.id) {
+          for (let listItem of list.listItems) {
+            if (listItem.id === cardId) {
+              list.listItems.splice(list.listItems.indexOf(listItem), 1);
+              return;
+            }
+          }
+        }
+      }
+      //BASEL
+      // return this._lists.map(list => {
+      //   if (list.id === listId) {
+      //     list.listItems.map((item, index) => {
+      //       if (item.id === cardId) {
+      //         list.listItems.splice(index, 1);
+      //       }
+      //     });
+      //   }
+      // });
+
+    },
+    getListId: function (element) { //used from inside list-structure to see which list the element is a children of
+      let regex = /list\d+/; //Sets a regex-definition to be used to the selected list.
+      let parent = element; //(element.localName === "ul") ? element : element.parentNode;
+      while(!regex.test(parent.className) || parent.localName !== "ul") { //if parent does not contain the id we're looking for, enter loop, also making sure regex matches the lists's id and nor card's id
+        parent = parent.parentNode; //climb one "step" up the html structure, loop again
+      }
+      return parent.className.match(regex)[0];  //Uses the above regex to identify the selected lists id.
     }
   };
 
   function listItemTemp(data) {
     let item = `
-  <li class="list-group-item mt-1">
+  <li class="list-group-item mt-1 ${data.id}" draggable="true">
                ${data.text}
                <div class="d-block mt-2">
                  <span class="badge badge-pill badge-secondary">${
@@ -200,7 +275,7 @@
           </div>
         </div>
         <!--Todo List Header + Dropdown Start-->
-        <ul class="list-group tcards">
+        <ul class="list-group tcards ${data.id}">
         </ul>
       </div>
       <!--add card button start -->
@@ -314,9 +389,37 @@
   let controller = {
     init: function() {
       view.init(this.getAllData(), target, this.miniControl);
+      this.dragDropHandler();
     },
     getAllData: function() {
       return model.getAllData();
+    },
+    dragDropHandler: function() {
+      let selectedLi;
+      let listId;
+      let cardId;
+
+      let listGroupItem = Array.from(document.querySelectorAll(".list-group-item"));
+      listGroupItem.map(li => {
+        li.addEventListener("dragstart", function (e) {
+          selectedLi = e.target;
+          listId = model.getListId(e.target);
+          cardId = selectedLi.className.match(/list\d+card\d+/)[0];
+        });
+      });
+
+      let listItemUls = Array.from(document.querySelectorAll(".tcards"));
+      listItemUls.map(ul => {
+        ul.addEventListener("dragover", function (e) {
+          e.preventDefault();
+          console.log("valid drop-area");
+        });
+        ul.addEventListener("drop", function (e) {
+          model.moveExistingCard(model.getListId(e.target), model.getCardObj(cardId)); //passes in targeted list along with obj and add
+          model.removeCard(listId, cardId);
+          controller.init();
+        });
+      });
     },
 
     miniControl: {
@@ -356,7 +459,7 @@
           .querySelector(`button[type="submit"]`);
         addCardBtn.addEventListener("click", function(e) {
           e.preventDefault();
-          model.addCard(id, "/" + textInput.value, textDescription.value);
+          model.addCard(id, textInput.value, textDescription.value);
           textInput.value = "";
           textDescription.value = "";
           cardHolderDiv.classList.remove(`show`);
@@ -407,5 +510,13 @@
     }
   };
   controller.init();
+
+  //test purpose
+  document.querySelector(".navbar-brand").addEventListener("click", function () {
+    console.log(controller.getAllData());
+  });
+  window.addEventListener("click", function (e) {
+    console.log(e.target);
+  });
 
 }());

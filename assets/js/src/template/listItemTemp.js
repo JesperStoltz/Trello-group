@@ -1,6 +1,6 @@
 export function listItemTemp(data) {
   let item = `
-  <li class="list-group-item mt-1">
+  <li class="list-group-item mt-1 ${data.id}" draggable="true">
                ${data.text}
                <div class="d-block mt-2">
                  <span class="badge badge-pill badge-secondary">${

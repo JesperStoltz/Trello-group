@@ -137,3 +137,12 @@ li:hover .navOpserver + span {
     margin: 17.75rem auto;
   }
 }
+
+.list-group-item {
+  cursor: pointer;
+  user-select: none;
+}
+
+.list-group {
+  min-height: 110px;
+}
