@@ -103,23 +103,20 @@ let controller = {
       const observer = new IntersectionObserver(
         entires => {
           entires.forEach(entry => {
+            document.querySelector(
+              `a[href='#${entry.target.id}']`
+            ).style.height = `${entry.target.clientHeight / 10}px`;
             if (entry.isIntersecting) {
               if (document.querySelector(`a[href='#${entry.target.id}']`)) {
                 document
                   .querySelector(`a[href='#${entry.target.id}']`)
                   .classList.add("navOpserver");
-                document.querySelector(
-                  `a[href='#${entry.target.id}']`
-                ).style.height = `${entry.target.clientHeight / 10}px`;
               }
             } else {
               if (document.querySelector(`a[href='#${entry.target.id}']`)) {
                 document
                   .querySelector(`a[href='#${entry.target.id}']`)
                   .classList.remove("navOpserver");
-                document.querySelector(
-                  `a[href='#${entry.target.id}']`
-                ).style.height = `${entry.target.clientHeight / 10}px`;
               }
             }
           });

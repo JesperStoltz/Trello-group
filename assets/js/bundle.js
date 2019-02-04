@@ -349,7 +349,7 @@
   function ulListTemp(data) {
     let item = `
       <li>
-      <a href="#${data.id}" data-scroll>
+      <a href="#${data.id}" class="" data-scroll>
       </a>
       <span class=" listSpan">${data.name}</span>
     </li>
@@ -422,7 +422,7 @@
           model.moveExistingCard(
             model.getListId(e.target),
             model.getCardObj(cardId)
-          ); //passes in targeted list along with obj and add
+          );
           model.removeCard(listId, cardId);
           controller.init();
         });
@@ -485,23 +485,20 @@
         const observer = new IntersectionObserver(
           entires => {
             entires.forEach(entry => {
+              document.querySelector(
+                `a[href='#${entry.target.id}']`
+              ).style.height = `${entry.target.clientHeight / 10}px`;
               if (entry.isIntersecting) {
                 if (document.querySelector(`a[href='#${entry.target.id}']`)) {
                   document
                     .querySelector(`a[href='#${entry.target.id}']`)
                     .classList.add("navOpserver");
-                  document.querySelector(
-                    `a[href='#${entry.target.id}']`
-                  ).style.height = `${entry.target.clientHeight / 10}px`;
                 }
               } else {
                 if (document.querySelector(`a[href='#${entry.target.id}']`)) {
                   document
                     .querySelector(`a[href='#${entry.target.id}']`)
                     .classList.remove("navOpserver");
-                  document.querySelector(
-                    `a[href='#${entry.target.id}']`
-                  ).style.height = `${entry.target.clientHeight / 10}px`;
                 }
               }
             });
@@ -517,13 +514,5 @@
     }
   };
   controller.init();
-
-  //test purpose
-  document.querySelector(".navbar-brand").addEventListener("click", function() {
-    console.log(controller.getAllData());
-  });
-  window.addEventListener("click", function(e) {
-    console.log(e.target);
-  });
 
 }());

@@ -1,7 +1,7 @@
 export function ulListTemp(data) {
   let item = `
       <li>
-      <a href="#${data.id}" data-scroll>
+      <a href="#${data.id}" class="" data-scroll>
       </a>
       <span class=" listSpan">${data.name}</span>
     </li>
