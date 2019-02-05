@@ -10,6 +10,7 @@ let controller = {
   init: function() {
     view.init(this.getAllData(), target, this.miniControl);
     this.dragDropHandler();
+    this.editCardEvent();
   },
   getAllData: function() {
     return model.getAllData();
@@ -18,6 +19,7 @@ let controller = {
     let selectedLi;
     let listId;
     let cardId;
+
 
     let listGroupItem = Array.from(
       document.querySelectorAll(".list-group-item")
@@ -34,19 +36,32 @@ let controller = {
     listItemUls.map(ul => {
       ul.addEventListener("dragover", function(e) {
         e.preventDefault();
-        console.log("valid drop-area");
       });
       ul.addEventListener("drop", function(e) {
-        model.moveExistingCard(
-          model.getListId(e.target),
-          model.getCardObj(cardId)
-        );
-        model.removeCard(listId, cardId);
-        controller.init();
+        if(e.target.localName === "ul" || e.target.localName === "li") {
+          model.moveExistingCard(model.getListId(e.target), model.getCardObj(cardId));
+          model.removeCard(listId, cardId);
+          controller.init();
+        }
       });
     });
   },
+  editCardEvent: function(){
+    let editCardDoneBtns = Array.from(document.querySelectorAll(".editCardDone"));
+    editCardDoneBtns.map(btn => {
+      btn.addEventListener("click", function(e) {
+        let cardId = model.getCardId(btn);
+        let cardEditUI = document.querySelector(`#${cardId}`);
+        let inputs = cardEditUI.querySelectorAll("input");
+        let inputName = inputs[0];
+        let inputDescription = inputs[1];
+        model.editCard(inputName.value, inputDescription.value, cardId);
 
+        let listItemName = document.querySelector(`.${cardId} > span`);
+        listItemName.textContent = inputName.value;
+      })
+    })
+  },
   miniControl: {
     removeList: function(id) {
       document
@@ -132,3 +147,9 @@ let controller = {
   }
 };
 controller.init();
+
+
+//test purpose
+document.querySelector(".navbar-brand").addEventListener("click", function() {
+  console.log(controller.getAllData());
+});

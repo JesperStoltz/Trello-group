@@ -95,6 +95,16 @@ export default {
       }
     });
   },
+  editCard: function(name, description, cardId) {
+    this._lists.map(list => {
+      list.listItems.map(item => {
+        if(item.id === cardId) {
+          item.text = name;
+          item.itemDescription = description;
+        }
+      })
+    })
+  },
   getCardObj: function(cardId) {
     let obj;
     this._lists.map(list => {
@@ -158,5 +168,13 @@ export default {
       parent = parent.parentNode; //climb one "step" up the html structure, loop again
     }
     return parent.className.match(regex)[0];  //Uses the above regex to identify the selected lists id.
+  },
+  getCardId: function(element) {
+    let regex = /list\d+card\d+/;
+    let parent = element;
+    while(!regex.test(parent.id)) {
+      parent = parent.parentNode;
+    }
+    return parent.id.match(regex)[0];
   }
 };
