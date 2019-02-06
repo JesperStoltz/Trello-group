@@ -20,10 +20,7 @@ let controller = {
     let listId;
     let cardId;
 
-
-    let listGroupItem = Array.from(
-      document.querySelectorAll(".list-group-item")
-    );
+    let listGroupItem = Array.from(document.querySelectorAll(".list-group-item"));
     listGroupItem.map(li => {
       li.addEventListener("dragstart", function(e) {
         selectedLi = e.target;
@@ -38,11 +35,15 @@ let controller = {
         e.preventDefault();
       });
       ul.addEventListener("drop", function(e) {
-        if(e.target.localName === "ul" || e.target.localName === "li") {
-          model.moveExistingCard(model.getListId(e.target), model.getCardObj(cardId));
-          model.removeCard(listId, cardId);
-          controller.init();
-        }
+        // hmmmmmm varför hade jag denna nu igen...
+        // if(e.target.localName === "ul" || e.target.localName === "li") {
+        //   model.moveExistingCard(model.getListId(e.target), model.getCardObj(cardId));
+        //   model.removeCard(listId, cardId);
+        //   controller.init();
+        // }
+        model.moveExistingCard(model.getListId(e.target), model.getCardObj(cardId));
+        model.removeCard(listId, cardId);
+        controller.init();
       });
     });
   },
@@ -56,7 +57,7 @@ let controller = {
         let inputName = inputs[0];
         let inputDescription = inputs[1];
         model.editCard(inputName.value, inputDescription.value, cardId);
-
+        //do the following in view instead
         let listItemName = document.querySelector(`.${cardId} > span`);
         listItemName.textContent = inputName.value;
       })
