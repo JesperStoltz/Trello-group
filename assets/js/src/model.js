@@ -11,15 +11,15 @@ export default {
           id: "list0card0",
           text: "To-do 1",
           itemDescription: "to-do 1 description",
-          user: "user 1",
-          date: "12-12-2019"
+          user: "userName",
+          date: "2019-01-01 00:00"
         },
         {
           id: "list0card1",
           text: "To-do 2",
           itemDescription: "to-do 2 description",
-          user: "user2",
-          date: "12-12-2019"
+          user: "userName",
+          date: "2019-01-01 00:00"
         }
       ]
     },
@@ -32,15 +32,15 @@ export default {
           id: "list1card0",
           text: "Doing 1",
           itemDescription: "Doing 1 description",
-          user: "user 1",
-          date: "12-12-2019"
+          user: "userNames",
+          date: "2019-01-01 00:00"
         },
         {
           id: "list1card1",
           text: "Doing 2",
           itemDescription: "Doing 2 description !!",
-          user: "user 2",
-          date: "12-12-2019"
+          user: "userName",
+          date: "2019-01-01 00:00"
         }
       ]
     },
@@ -53,15 +53,15 @@ export default {
           id: "list2card0",
           text: "Done 1",
           itemDescription: "Done 1 description",
-          user: "user 1",
-          date: "12-12-2019"
+          user: "userName",
+          date: "2019-01-01 00:00"
         },
         {
           id: "list2card1",
           text: "Done 2",
           itemDescription: "Done 2 description !!",
-          user: "user 2",
-          date: "12-12-2019"
+          user: "userName",
+          date: "2019-01-01 00:00"
         }
       ]
     }
@@ -117,6 +117,7 @@ export default {
     return obj;
   },
   addCard: function(id, text, description) {
+    let options = {year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric'};
     return this._lists.filter(list => {
       if (list.id === id) {
         list.listItemsId++;
@@ -125,7 +126,7 @@ export default {
           text: text,
           itemDescription: description,
           user: this.user,
-          date: new Date().toGMTString()
+          date: new Date().toLocaleString('sv-SE', options),
         });
       }
     });
