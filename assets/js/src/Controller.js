@@ -22,10 +22,13 @@ let controller = {
 
     let listGroupItem = Array.from(document.querySelectorAll(".list-group-item"));
     listGroupItem.map(li => {
-      li.addEventListener("dragstart", function(e) {
-        selectedLi = e.target;
-        listId = model.getListId(e.target);
+      li.addEventListener("dragstart", function() {
+        selectedLi = this;
+        listId = model.getListId(this);
         cardId = selectedLi.className.match(/list\d+card\d+/)[0];
+        setTimeout(function () { //must be in a timeout or else item hides before it's picked up
+          selectedLi.classList.add("d-none");
+        },1);
       });
     });
 
@@ -34,16 +37,17 @@ let controller = {
       ul.addEventListener("dragover", function(e) {
         e.preventDefault();
       });
-      ul.addEventListener("drop", function(e) {
-        // hmmmmmm varför hade jag denna nu igen...
-        // if(e.target.localName === "ul" || e.target.localName === "li") {
-        //   model.moveExistingCard(model.getListId(e.target), model.getCardObj(cardId));
-        //   model.removeCard(listId, cardId);
-        //   controller.init();
-        // }
-        model.moveExistingCard(model.getListId(e.target), model.getCardObj(cardId));
-        model.removeCard(listId, cardId);
-        controller.init();
+
+      ul.addEventListener("dragend", function () {
+        selectedLi.classList.remove("d-none");
+      })
+
+      ul.addEventListener("drop", function() {
+        if (model.getListId(this) !== listId) { //to not drop in the same list
+          model.moveExistingCard(model.getListId(this), model.getCardObj(cardId));
+          model.removeCard(listId, cardId);
+          controller.init();
+        }
       });
     });
   },
@@ -57,7 +61,8 @@ let controller = {
         let inputName = inputs[0];
         let inputDescription = inputs[1];
         model.editCard(inputName.value, inputDescription.value, cardId);
-        //do the following in view instead
+
+        //move this to view?
         let listItemName = document.querySelector(`.${cardId} > span`);
         listItemName.textContent = inputName.value;
       })

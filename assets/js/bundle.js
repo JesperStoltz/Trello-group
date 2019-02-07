@@ -13,14 +13,14 @@
           {
             id: "list0card0",
             text: "To-do 1",
-            itemDescription: "to-do 1 description",
+            itemDescription: "Description",
             user: "userName",
             date: "2019-01-01 00:00"
           },
           {
             id: "list0card1",
             text: "To-do 2",
-            itemDescription: "to-do 2 description",
+            itemDescription: "Description",
             user: "userName",
             date: "2019-01-01 00:00"
           }
@@ -34,14 +34,14 @@
           {
             id: "list1card0",
             text: "Doing 1",
-            itemDescription: "Doing 1 description",
+            itemDescription: "Description",
             user: "userNames",
             date: "2019-01-01 00:00"
           },
           {
             id: "list1card1",
             text: "Doing 2",
-            itemDescription: "Doing 2 description !!",
+            itemDescription: "Description",
             user: "userName",
             date: "2019-01-01 00:00"
           }
@@ -55,14 +55,14 @@
           {
             id: "list2card0",
             text: "Done 1",
-            itemDescription: "Done 1 description",
+            itemDescription: "Description",
             user: "userName",
             date: "2019-01-01 00:00"
           },
           {
             id: "list2card1",
             text: "Done 2",
-            itemDescription: "Done 2 description !!",
+            itemDescription: "Description",
             user: "userName",
             date: "2019-01-01 00:00"
           }
@@ -142,7 +142,6 @@
       });
     },
     removeCard: function(listId, cardId) {
-      //EMIL
       for (let list of this._lists) {
         if (listId === list.id) {
           for (let listItem of list.listItems) {
@@ -153,7 +152,7 @@
           }
         }
       }
-      //BASEL
+      //filter function collides with drag n drop somehow
       // return this._lists.map(list => {
       //   if (list.id === listId) {
       //     list.listItems.map((item, index) => {
@@ -404,28 +403,32 @@
 
       let listGroupItem = Array.from(document.querySelectorAll(".list-group-item"));
       listGroupItem.map(li => {
-        li.addEventListener("dragstart", function(e) {
-          selectedLi = e.target;
-          listId = model.getListId(e.target);
+        li.addEventListener("dragstart", function() {
+          selectedLi = this;
+          listId = model.getListId(this);
           cardId = selectedLi.className.match(/list\d+card\d+/)[0];
+          setTimeout(function () { //must be in a timeout or else item hides before it's picked up
+            selectedLi.classList.add("d-none");
+          },1);
         });
       });
-
+      
       let listItemUls = Array.from(document.querySelectorAll(".tcards"));
       listItemUls.map(ul => {
         ul.addEventListener("dragover", function(e) {
           e.preventDefault();
         });
-        ul.addEventListener("drop", function(e) {
-          // hmmmmmm varför hade jag denna nu igen...
-          // if(e.target.localName === "ul" || e.target.localName === "li") {
-          //   model.moveExistingCard(model.getListId(e.target), model.getCardObj(cardId));
-          //   model.removeCard(listId, cardId);
-          //   controller.init();
-          // }
-          model.moveExistingCard(model.getListId(e.target), model.getCardObj(cardId));
-          model.removeCard(listId, cardId);
-          controller.init();
+
+        ul.addEventListener("dragend", function () {
+          selectedLi.classList.remove("d-none");
+        });
+
+        ul.addEventListener("drop", function() {
+          if (model.getListId(this) !== listId) { //to not drop in the same list
+            model.moveExistingCard(model.getListId(this), model.getCardObj(cardId));
+            model.removeCard(listId, cardId);
+            controller.init();
+          }
         });
       });
     },
@@ -439,7 +442,8 @@
           let inputName = inputs[0];
           let inputDescription = inputs[1];
           model.editCard(inputName.value, inputDescription.value, cardId);
-          //do the following in view instead
+
+          //move this to view?
           let listItemName = document.querySelector(`.${cardId} > span`);
           listItemName.textContent = inputName.value;
         });

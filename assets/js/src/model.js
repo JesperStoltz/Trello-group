@@ -10,14 +10,14 @@ export default {
         {
           id: "list0card0",
           text: "To-do 1",
-          itemDescription: "to-do 1 description",
+          itemDescription: "Description",
           user: "userName",
           date: "2019-01-01 00:00"
         },
         {
           id: "list0card1",
           text: "To-do 2",
-          itemDescription: "to-do 2 description",
+          itemDescription: "Description",
           user: "userName",
           date: "2019-01-01 00:00"
         }
@@ -31,14 +31,14 @@ export default {
         {
           id: "list1card0",
           text: "Doing 1",
-          itemDescription: "Doing 1 description",
+          itemDescription: "Description",
           user: "userNames",
           date: "2019-01-01 00:00"
         },
         {
           id: "list1card1",
           text: "Doing 2",
-          itemDescription: "Doing 2 description !!",
+          itemDescription: "Description",
           user: "userName",
           date: "2019-01-01 00:00"
         }
@@ -52,14 +52,14 @@ export default {
         {
           id: "list2card0",
           text: "Done 1",
-          itemDescription: "Done 1 description",
+          itemDescription: "Description",
           user: "userName",
           date: "2019-01-01 00:00"
         },
         {
           id: "list2card1",
           text: "Done 2",
-          itemDescription: "Done 2 description !!",
+          itemDescription: "Description",
           user: "userName",
           date: "2019-01-01 00:00"
         }
@@ -139,7 +139,6 @@ export default {
     })
   },
   removeCard: function(listId, cardId) {
-    //EMIL
     for (let list of this._lists) {
       if (listId === list.id) {
         for (let listItem of list.listItems) {
@@ -150,7 +149,7 @@ export default {
         }
       }
     }
-    //BASEL
+    //filter function collides with drag n drop somehow
     // return this._lists.map(list => {
     //   if (list.id === listId) {
     //     list.listItems.map((item, index) => {
