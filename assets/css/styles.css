@@ -181,6 +181,7 @@ li:hover .navOpserver + span {
 .modal-body-input {
   top: 3px;
   padding: 16px;
+  outline: none;
 }
 
 span .badge {
@@ -200,7 +201,6 @@ span .badge {
 .modal-header:hover .modal-header-tooltip {
   display: block;
   z-index: 999;
-  margin: 0 au;
   position: absolute;
   right: 4px;
   top: 4px;
