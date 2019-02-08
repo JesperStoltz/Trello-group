@@ -362,7 +362,7 @@
   function ulListTemp(data) {
     let item = `
       <li>
-      <a href="#${data.id}" class="" data-scroll>
+      <a href="#${data.id}" class=""navOpserver data-scroll>
       </a>
       <span class=" listSpan">${data.name}</span>
     </li>
@@ -415,15 +415,18 @@
       let listId;
       let cardId;
 
-      let listGroupItem = Array.from(document.querySelectorAll(".list-group-item"));
+      let listGroupItem = Array.from(
+        document.querySelectorAll(".list-group-item")
+      );
       listGroupItem.map(li => {
         li.addEventListener("dragstart", function() {
           selectedLi = this;
           listId = model.getListId(this);
           cardId = selectedLi.className.match(/list\d+card\d+/)[0];
-          setTimeout(function () { //must be in a timeout or else item hides before it's picked up
+          setTimeout(function() {
+            //must be in a timeout or else item hides before it's picked up
             selectedLi.classList.add("d-none");
-          },1);
+          }, 1);
         });
       });
 
@@ -433,21 +436,27 @@
           e.preventDefault();
         });
 
-        ul.addEventListener("dragend", function () {
+        ul.addEventListener("dragend", function() {
           selectedLi.classList.remove("d-none");
         });
 
         ul.addEventListener("drop", function() {
-          if (model.getListId(this) !== listId) { //to not drop in the same list
-            model.moveExistingCard(model.getListId(this), model.getCardObj(cardId));
+          if (model.getListId(this) !== listId) {
+            //to not drop in the same list
+            model.moveExistingCard(
+              model.getListId(this),
+              model.getCardObj(cardId)
+            );
             model.removeCard(listId, cardId);
             controller.init();
           }
         });
       });
     },
-    editCardEvent: function(){
-      let editCardDoneBtns = Array.from(document.querySelectorAll(".editCardDone"));
+    editCardEvent: function() {
+      let editCardDoneBtns = Array.from(
+        document.querySelectorAll(".editCardDone")
+      );
       editCardDoneBtns.map(btn => {
         btn.addEventListener("click", function(e) {
           let cardId = model.getCardId(btn);
@@ -516,39 +525,14 @@
         });
       },
       intersectionObserver: function(t) {
-        const observer = new IntersectionObserver(
-          entires => {
-            entires.forEach(entry => {
-              document.querySelector(
-                `a[href='#${entry.target.id}']`
-              ).style.height = `${entry.target.clientHeight / 10}px`;
-              if (entry.isIntersecting) {
-                if (document.querySelector(`a[href='#${entry.target.id}']`)) {
-                  document
-                    .querySelector(`a[href='#${entry.target.id}']`)
-                    .classList.add("navOpserver");
-                }
-              } else {
-                if (document.querySelector(`a[href='#${entry.target.id}']`)) {
-                  document
-                    .querySelector(`a[href='#${entry.target.id}']`)
-                    .classList.remove("navOpserver");
-                }
-              }
-            });
-          },
-          {
-            root: null
-          }
-        );
-        $.map(t, function(a) {
-          observer.observe(a);
+        [...t].map(li => {
+          $(`li a[href="#${li.id}"]`).height($(li).height() / 15);
+          console.log();
         });
       }
     }
   };
   controller.init();
-
 
   //test purpose
   document.querySelector(".navbar-brand").addEventListener("click", function() {

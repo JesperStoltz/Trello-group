@@ -77,12 +77,14 @@ body {
   display: flex;
   justify-content: center;
   align-items: start;
+  flex-wrap: wrap;
   padding: 10px 10px;
   width: 100vw;
   list-style: none;
   transition: all 0.4s;
 }
 #listNav li {
+  margin: 3px 0;
   flex: 0 0 35px;
   min-height: 40px;
   display: flex;
@@ -96,7 +98,7 @@ body {
   width: 30px;
   display: block;
   border-radius: 4px;
-  background: rgba(128, 128, 128, 0.281);
+  background: #17a3b898;
 }
 #listNav li:hover a {
   background: #17a2b8;
