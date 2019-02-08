@@ -461,12 +461,11 @@
         btn.addEventListener("click", function(e) {
           let cardId = model.getCardId(btn);
           let cardEditUI = document.querySelector(`#${cardId}`);
-          let inputs = cardEditUI.querySelectorAll("input");
-          let inputName = inputs[0];
-          let inputDescription = inputs[1];
+          let inputName = cardEditUI.querySelector("input");
+          let inputDescription = cardEditUI.querySelector("textarea");
           model.editCard(inputName.value, inputDescription.value, cardId);
 
-          //move this to view?
+          // move this to view?
           let listItemName = document.querySelector(`.${cardId} > span`);
           listItemName.textContent = inputName.value;
         });
