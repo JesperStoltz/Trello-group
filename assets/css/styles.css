@@ -202,8 +202,8 @@ span .badge {
   z-index: 999;
   margin: 0 au;
   position: absolute;
-  left: 25%;
-  top: 2px;
+  right: 4px;
+  top: 4px;
   font-size: 13px;
   opacity: 0.6;
   background: #00a2b9;
@@ -214,10 +214,9 @@ span .badge {
 .modal-body:hover .modal-header-tooltip {
   display: block;
   z-index: 999;
-  margin: 0 au;
   position: absolute;
-  left: 25%;
-  top: 2px;
+  right: 4px;
+  top: 4px;
   font-size: 13px;
   opacity: 0.6;
   background: #00a2b9;
