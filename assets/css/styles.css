@@ -4,7 +4,7 @@ body {
 }
 #navContainer {
   position: fixed;
-  z-index: 9999999;
+  z-index: 1;
   background: white;
 }
 #bodyContainer {
@@ -173,7 +173,6 @@ li:hover .navOpserver + span {
 
 .modal-body {
   position: relative;
-  height: 56px;
   padding: 0;
   margin: 0;
   border: none;
@@ -185,11 +184,49 @@ li:hover .navOpserver + span {
 }
 
 span .badge {
-   z-index: -1;
-   pointer-events: none;
+  z-index: -1;
+  pointer-events: none;
 }
 
 .drop-indicator {
-  box-shadow: 10px 10px 60px 0px rgba(122,122,122,1);
+  box-shadow: 10px 10px 60px 0px rgba(122, 122, 122, 1);
   transition: ease 50ms;
+}
+
+.modal-header-tooltip {
+  display: none;
+}
+
+.modal-header:hover .modal-header-tooltip {
+  display: block;
+  z-index: 999;
+  margin: 0 au;
+  position: absolute;
+  left: 25%;
+  top: 2px;
+  font-size: 13px;
+  opacity: 0.6;
+  background: #00a2b9;
+  color: white;
+  border-radius: 4px;
+  padding: 3px 12px;
+}
+.modal-body:hover .modal-header-tooltip {
+  display: block;
+  z-index: 999;
+  margin: 0 au;
+  position: absolute;
+  left: 25%;
+  top: 2px;
+  font-size: 13px;
+  opacity: 0.6;
+  background: #00a2b9;
+  color: white;
+  border-radius: 4px;
+  padding: 3px 12px;
+}
+
+.modal-header-input:focus ~ .modal-header-tooltip,
+.modal-body-input:focus ~ .modal-header-tooltip {
+  display: none;
 }
