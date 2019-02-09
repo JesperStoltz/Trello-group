@@ -84,7 +84,6 @@ let controller = {
         // move this to view?
         let listItemName = document.querySelector(`.${cardId} > span`);
         listItemName.textContent = inputName.value;
-        console.log(model.getCardObj(cardId).itemDescriptionHistory);
         cardEditUI.querySelector("#accordion" + cardId).innerHTML = "";
         model.getCardObj(cardId).itemDescriptionHistory.map((data, index) => {
           cardEditUI.querySelector(
@@ -176,8 +175,3 @@ let controller = {
   }
 };
 controller.init();
-
-//test purpose
-document.querySelector(".navbar-brand").addEventListener("click", function() {
-  console.log(controller.getAllData());
-});

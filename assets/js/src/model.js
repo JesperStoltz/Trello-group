@@ -114,7 +114,6 @@ export default {
         if (item.id === cardId) {
           item.text = name;
           item.itemDescription = description;
-          console.log(oldDescription, description);
           if (oldDescription.length !== 0 && description !== oldDescription) {
             item.itemDescriptionHistory.unshift({
               old: oldDescription,

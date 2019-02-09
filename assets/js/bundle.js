@@ -117,7 +117,6 @@
           if (item.id === cardId) {
             item.text = name;
             item.itemDescription = description;
-            console.log(oldDescription, description);
             if (oldDescription.length !== 0 && description !== oldDescription) {
               item.itemDescriptionHistory.unshift({
                 old: oldDescription,
@@ -519,7 +518,6 @@
           // move this to view?
           let listItemName = document.querySelector(`.${cardId} > span`);
           listItemName.textContent = inputName.value;
-          console.log(model.getCardObj(cardId).itemDescriptionHistory);
           cardEditUI.querySelector("#accordion" + cardId).innerHTML = "";
           model.getCardObj(cardId).itemDescriptionHistory.map((data, index) => {
             cardEditUI.querySelector(
@@ -611,10 +609,5 @@
     }
   };
   controller.init();
-
-  //test purpose
-  document.querySelector(".navbar-brand").addEventListener("click", function() {
-    console.log(controller.getAllData());
-  });
 
 }());
