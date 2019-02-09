@@ -114,7 +114,10 @@ export default {
         if (item.id === cardId) {
           item.text = name;
           item.itemDescription = description;
-          if (oldDescription.length !== 0 && description !== oldDescription) {
+          if (
+            oldDescription.length !== 0 &&
+            description.replace(/\s+$/, "") !== oldDescription
+          ) {
             item.itemDescriptionHistory.unshift({
               old: oldDescription,
               date: new Date().toLocaleString("sv-SE", options),
