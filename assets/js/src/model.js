@@ -10,14 +10,16 @@ export default {
         {
           id: "list0card0",
           text: "To-do 1",
-          itemDescription: "Description",
+          itemDescription: "",
+          itemDescriptionHistory: [],
           user: "userName",
           date: "2019-01-01 00:00"
         },
         {
           id: "list0card1",
           text: "To-do 2",
-          itemDescription: "Description",
+          itemDescription: "",
+          itemDescriptionHistory: [],
           user: "userName",
           date: "2019-01-01 00:00"
         }
@@ -31,14 +33,16 @@ export default {
         {
           id: "list1card0",
           text: "Doing 1",
-          itemDescription: "Description",
+          itemDescription: "",
+          itemDescriptionHistory: [],
           user: "userNames",
           date: "2019-01-01 00:00"
         },
         {
           id: "list1card1",
           text: "Doing 2",
-          itemDescription: "Description",
+          itemDescription: "",
+          itemDescriptionHistory: [],
           user: "userName",
           date: "2019-01-01 00:00"
         }
@@ -52,14 +56,16 @@ export default {
         {
           id: "list2card0",
           text: "Done 1",
-          itemDescription: "Description",
+          itemDescription: "",
+          itemDescriptionHistory: [],
           user: "userName",
           date: "2019-01-01 00:00"
         },
         {
           id: "list2card1",
           text: "Done 2",
-          itemDescription: "Description",
+          itemDescription: "",
+          itemDescriptionHistory: [],
           user: "userName",
           date: "2019-01-01 00:00"
         }
@@ -95,12 +101,27 @@ export default {
       }
     });
   },
-  editCard: function(name, description, cardId) {
+  editCard: function(name, description, cardId, oldDescription) {
+    let options = {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric"
+    };
     this._lists.map(list => {
       list.listItems.map(item => {
         if (item.id === cardId) {
           item.text = name;
           item.itemDescription = description;
+          console.log(oldDescription, description);
+          if (oldDescription.length !== 0 && description !== oldDescription) {
+            item.itemDescriptionHistory.unshift({
+              old: oldDescription,
+              date: new Date().toLocaleString("sv-SE", options),
+              by: this.user
+            });
+          }
         }
       });
     });
@@ -132,7 +153,8 @@ export default {
           text: text,
           itemDescription: description,
           user: this.user,
-          date: new Date().toLocaleString("sv-SE", options)
+          date: new Date().toLocaleString("sv-SE", options),
+          itemDescriptionHistory: []
         });
       }
     });

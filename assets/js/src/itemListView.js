@@ -12,6 +12,7 @@ export default {
         target
           .querySelector(`#${element.id}`)
           .querySelector(`.tcards`).innerHTML += listItemTemp(listItem);
+        //console.log(listItem.itemDescriptionHistory);
         miniControl.removeCard(element.id);
       });
     });

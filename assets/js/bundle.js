@@ -13,14 +13,16 @@
           {
             id: "list0card0",
             text: "To-do 1",
-            itemDescription: "Description",
+            itemDescription: "",
+            itemDescriptionHistory: [],
             user: "userName",
             date: "2019-01-01 00:00"
           },
           {
             id: "list0card1",
             text: "To-do 2",
-            itemDescription: "Description",
+            itemDescription: "",
+            itemDescriptionHistory: [],
             user: "userName",
             date: "2019-01-01 00:00"
           }
@@ -34,14 +36,16 @@
           {
             id: "list1card0",
             text: "Doing 1",
-            itemDescription: "Description",
+            itemDescription: "",
+            itemDescriptionHistory: [],
             user: "userNames",
             date: "2019-01-01 00:00"
           },
           {
             id: "list1card1",
             text: "Doing 2",
-            itemDescription: "Description",
+            itemDescription: "",
+            itemDescriptionHistory: [],
             user: "userName",
             date: "2019-01-01 00:00"
           }
@@ -55,14 +59,16 @@
           {
             id: "list2card0",
             text: "Done 1",
-            itemDescription: "Description",
+            itemDescription: "",
+            itemDescriptionHistory: [],
             user: "userName",
             date: "2019-01-01 00:00"
           },
           {
             id: "list2card1",
             text: "Done 2",
-            itemDescription: "Description",
+            itemDescription: "",
+            itemDescriptionHistory: [],
             user: "userName",
             date: "2019-01-01 00:00"
           }
@@ -98,12 +104,27 @@
         }
       });
     },
-    editCard: function(name, description, cardId) {
+    editCard: function(name, description, cardId, oldDescription) {
+      let options = {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric"
+      };
       this._lists.map(list => {
         list.listItems.map(item => {
           if (item.id === cardId) {
             item.text = name;
             item.itemDescription = description;
+            console.log(oldDescription, description);
+            if (oldDescription.length !== 0 && description !== oldDescription) {
+              item.itemDescriptionHistory.unshift({
+                old: oldDescription,
+                date: new Date().toLocaleString("sv-SE", options),
+                by: this.user
+              });
+            }
           }
         });
       });
@@ -135,7 +156,8 @@
             text: text,
             itemDescription: description,
             user: this.user,
-            date: new Date().toLocaleString("sv-SE", options)
+            date: new Date().toLocaleString("sv-SE", options),
+            itemDescriptionHistory: []
           });
         }
       });
@@ -207,10 +229,14 @@
                     <div class="modal-header-tooltip">Click to edit</div>
                   </div>
                   <div class="modal-body">
-                    <textarea class="form-control modal-body-input" id="exampleFormControlTextarea1" rows="3">${
-                      data.itemDescription
-                    }</textarea>
+                    <textarea class="form-control modal-body-input" id="exampleFormControlTextarea1" rows="3" placeHolder="Description"
+                    >${data.itemDescription}</textarea>
                     <div class="modal-header-tooltip">Click to edit</div>
+                    <!--start-->
+                    <div class="accordion" id="accordion${data.id}">
+                    
+                    </div>
+                    <!--end-->
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-info editCardDone" data-dismiss="modal">Change</button>
@@ -236,6 +262,7 @@
           target
             .querySelector(`#${element.id}`)
             .querySelector(`.tcards`).innerHTML += listItemTemp(listItem);
+          //console.log(listItem.itemDescriptionHistory);
           miniControl.removeCard(element.id);
         });
       });
@@ -384,6 +411,31 @@
     }
   };
 
+  function descriptionHistory(data, dataIndex, cardId) {
+    let element = `
+   <div class="card">
+     <div class="card-header" id="heading${dataIndex}-${cardId}">
+       <h2 class="mb-0">
+        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse${dataIndex}-${cardId}" aria-expanded="true" aria-controls="collapseOne">
+        Edited By :${data.by} <span>${data.date}</span>
+        </button>
+      </h2>
+    </div>
+    <div id="collapse${dataIndex}-${cardId}" class="collapse " aria-labelledby="heading${dataIndex}-${cardId}" data-parent="#accordionExample">
+      <div class="card-body">
+      ${data.old}
+      </div>
+    </div>
+   </div> 
+   `;
+
+    return element;
+  }
+
+  /*by: "userName"
+  date: "2019-02-09 12:59"
+  old: "" */
+
   let target = document.getElementById("TodoListHolder");
   let addListBtn = document.getElementById("addList");
   addListBtn.addEventListener("click", function() {
@@ -447,18 +499,37 @@
         document.querySelectorAll(".editCardDone")
       );
       editCardDoneBtns.map(btn => {
+        let cardId = controller.getCardId(btn);
+        let cardEditUI = document.querySelector(`#${cardId}`);
+        let oldValue = "";
+        cardEditUI
+          .querySelector("textarea")
+          .addEventListener("focus", function() {
+            oldValue = this.value;
+          });
         btn.addEventListener("click", function(e) {
-          let cardId = controller.getCardId(btn);
-          let cardEditUI = document.querySelector(`#${cardId}`);
           let inputName = cardEditUI.querySelector("input");
           let inputDescription = cardEditUI.querySelector("textarea");
-          model.editCard(inputName.value, inputDescription.value, cardId);
-
+          model.editCard(
+            inputName.value,
+            inputDescription.value,
+            cardId,
+            oldValue
+          );
           // move this to view?
           let listItemName = document.querySelector(`.${cardId} > span`);
           listItemName.textContent = inputName.value;
+          console.log(model.getCardObj(cardId).itemDescriptionHistory);
+          cardEditUI.querySelector("#accordion" + cardId).innerHTML = "";
+          model.getCardObj(cardId).itemDescriptionHistory.map((data, index) => {
+            cardEditUI.querySelector(
+              "#accordion" + cardId
+            ).innerHTML += descriptionHistory(data, index, cardId);
+          });
+          oldValue = "";
         });
       });
+      //controller.init();
     },
     getListId: function(element) {
       //used from inside list-structure to see which list the element is a children of

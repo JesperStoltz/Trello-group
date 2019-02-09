@@ -1,5 +1,6 @@
 import model from "./model";
 import view from "./view";
+import descriptionHistory from "./template/descriptionHistoryTemp";
 let target = document.getElementById("TodoListHolder");
 let addListBtn = document.getElementById("addList");
 addListBtn.addEventListener("click", function() {
@@ -63,18 +64,37 @@ let controller = {
       document.querySelectorAll(".editCardDone")
     );
     editCardDoneBtns.map(btn => {
+      let cardId = controller.getCardId(btn);
+      let cardEditUI = document.querySelector(`#${cardId}`);
+      let oldValue = "";
+      cardEditUI
+        .querySelector("textarea")
+        .addEventListener("focus", function() {
+          oldValue = this.value;
+        });
       btn.addEventListener("click", function(e) {
-        let cardId = controller.getCardId(btn);
-        let cardEditUI = document.querySelector(`#${cardId}`);
         let inputName = cardEditUI.querySelector("input");
         let inputDescription = cardEditUI.querySelector("textarea");
-        model.editCard(inputName.value, inputDescription.value, cardId);
-
+        model.editCard(
+          inputName.value,
+          inputDescription.value,
+          cardId,
+          oldValue
+        );
         // move this to view?
         let listItemName = document.querySelector(`.${cardId} > span`);
         listItemName.textContent = inputName.value;
+        console.log(model.getCardObj(cardId).itemDescriptionHistory);
+        cardEditUI.querySelector("#accordion" + cardId).innerHTML = "";
+        model.getCardObj(cardId).itemDescriptionHistory.map((data, index) => {
+          cardEditUI.querySelector(
+            "#accordion" + cardId
+          ).innerHTML += descriptionHistory(data, index, cardId);
+        });
+        oldValue = "";
       });
     });
+    //controller.init();
   },
   getListId: function(element) {
     //used from inside list-structure to see which list the element is a children of

@@ -34,10 +34,14 @@ export function listItemTemp(data) {
                     <div class="modal-header-tooltip">Click to edit</div>
                   </div>
                   <div class="modal-body">
-                    <textarea class="form-control modal-body-input" id="exampleFormControlTextarea1" rows="3">${
-                      data.itemDescription
-                    }</textarea>
+                    <textarea class="form-control modal-body-input" id="exampleFormControlTextarea1" rows="3" placeHolder="Description"
+                    >${data.itemDescription}</textarea>
                     <div class="modal-header-tooltip">Click to edit</div>
+                    <!--start-->
+                    <div class="accordion" id="accordion${data.id}">
+                    
+                    </div>
+                    <!--end-->
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-info editCardDone" data-dismiss="modal">Change</button>
