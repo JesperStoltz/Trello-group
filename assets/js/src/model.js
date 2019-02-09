@@ -165,23 +165,5 @@ export default {
     //     });
     //   }
     // });
-  },
-  getListId: function(element) {
-    //used from inside list-structure to see which list the element is a children of
-    let regex = /list\d+/; //Sets a regex-definition to be used to the selected list.
-    let parent = element; //(element.localName === "ul") ? element : element.parentNode;
-    while (!regex.test(parent.className) || parent.localName !== "ul") {
-      //if parent does not contain the id we're looking for, enter loop, also making sure regex matches the lists's id and nor card's id
-      parent = parent.parentNode; //climb one "step" up the html structure, loop again
-    }
-    return parent.className.match(regex)[0]; //Uses the above regex to identify the selected lists id.
-  },
-  getCardId: function(element) {
-    let regex = /list\d+card\d+/;
-    let parent = element;
-    while (!regex.test(parent.id)) {
-      parent = parent.parentNode;
-    }
-    return parent.id.match(regex)[0];
   }
 };

@@ -7,7 +7,7 @@ describe("model list's", function() {
     model.id = 0;
   });
 
-  it("Can add create & add another list's", function() {
+  it("Can create list", function() {
     assert.equal(model._lists.length, 0);
     model.addNewList();
     assert.equal(model._lists.length, 1);
@@ -29,7 +29,7 @@ describe("model list's", function() {
     assert.equal(model._lists.length, 2);
   });
 
-  it("Can add rename list", function() {
+  it("Can rename list", function() {
     assert.equal(model._lists.length, 0);
     model.addNewList();
     model.addNewList();
@@ -38,7 +38,7 @@ describe("model list's", function() {
     assert.deepEqual(model._lists[2].name, "new name");
   });
 
-  it("Can  add card", function() {
+  it("Can add card", function() {
     assert.equal(model._lists.length, 0);
     model.addNewList();
     model.addNewList();
@@ -48,7 +48,7 @@ describe("model list's", function() {
     model.addCard("list2", "text", "description");
     model.removeCard("list3", "card2");
   });
-  it("Can  remove card", function() {
+  it("Can remove card", function() {
     assert.equal(model._lists.length, 0);
     model.addNewList();
     model.addNewList();
@@ -57,7 +57,6 @@ describe("model list's", function() {
     model.addCard("list1", "text", "description");
     assert.equal(model._lists[1].listItems.length, 3);
     model.removeCard("list1", "list1card2");
-    console.log(model._lists[1]);
     assert.equal(model._lists[1].listItems.length, 2);
   });
 });

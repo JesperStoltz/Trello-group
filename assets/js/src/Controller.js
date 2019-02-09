@@ -26,7 +26,7 @@ let controller = {
     listGroupItem.map(li => {
       li.addEventListener("dragstart", function() {
         selectedLi = this;
-        listId = model.getListId(this);
+        listId = controller.getListId(this);
         cardId = selectedLi.className.match(/list\d+card\d+/)[0];
         setTimeout(function() {
           //must be in a timeout or else item hides before it's picked up
@@ -46,10 +46,10 @@ let controller = {
       });
 
       ul.addEventListener("drop", function() {
-        if (model.getListId(this) !== listId) {
+        if (controller.getListId(this) !== listId) {
           //to not drop in the same list
           model.moveExistingCard(
-            model.getListId(this),
+            controller.getListId(this),
             model.getCardObj(cardId)
           );
           model.removeCard(listId, cardId);
@@ -64,7 +64,7 @@ let controller = {
     );
     editCardDoneBtns.map(btn => {
       btn.addEventListener("click", function(e) {
-        let cardId = model.getCardId(btn);
+        let cardId = controller.getCardId(btn);
         let cardEditUI = document.querySelector(`#${cardId}`);
         let inputName = cardEditUI.querySelector("input");
         let inputDescription = cardEditUI.querySelector("textarea");
@@ -75,6 +75,24 @@ let controller = {
         listItemName.textContent = inputName.value;
       });
     });
+  },
+  getListId: function(element) {
+    //used from inside list-structure to see which list the element is a children of
+    let regex = /list\d+/; //Sets a regex-definition to be used to the selected list.
+    let parent = element; //(element.localName === "ul") ? element : element.parentNode;
+    while (!regex.test(parent.className) || parent.localName !== "ul") {
+      //if parent does not contain the id we're looking for, enter loop, also making sure regex matches the lists's id and nor card's id
+      parent = parent.parentNode; //climb one "step" up the html structure, loop again
+    }
+    return parent.className.match(regex)[0]; //Uses the above regex to identify the selected lists id.
+  },
+  getCardId: function(element) {
+    let regex = /list\d+card\d+/;
+    let parent = element;
+    while (!regex.test(parent.id)) {
+      parent = parent.parentNode;
+    }
+    return parent.id.match(regex)[0];
   },
   miniControl: {
     removeList: function(id) {
