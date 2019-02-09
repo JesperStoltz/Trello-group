@@ -85,14 +85,14 @@
       return this._lists[this._lists.length - 1];
     },
     removeList: function(id) {
-      return this._lists.filter((list, index) => {
+      return this._lists.map((list, index) => {
         if (list.id === id) {
           this._lists.splice(index, 1);
         }
       });
     },
     rename: function(id, newName) {
-      return this._lists.filter(list => {
+      return this._lists.map(list => {
         if (list.id === id) {
           list.name = newName;
         }
@@ -101,7 +101,7 @@
     editCard: function(name, description, cardId) {
       this._lists.map(list => {
         list.listItems.map(item => {
-          if(item.id === cardId) {
+          if (item.id === cardId) {
             item.text = name;
             item.itemDescription = description;
           }
@@ -120,8 +120,14 @@
       return obj;
     },
     addCard: function(id, text, description) {
-      let options = {year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric'};
-      return this._lists.filter(list => {
+      let options = {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric"
+      };
+      return this._lists.map(list => {
         if (list.id === id) {
           list.listItemsId++;
           list.listItems.push({
@@ -129,7 +135,7 @@
             text: text,
             itemDescription: description,
             user: this.user,
-            date: new Date().toLocaleString('sv-SE', options),
+            date: new Date().toLocaleString("sv-SE", options)
           });
         }
       });
@@ -162,20 +168,21 @@
       //     });
       //   }
       // });
-
     },
-    getListId: function (element) { //used from inside list-structure to see which list the element is a children of
+    getListId: function(element) {
+      //used from inside list-structure to see which list the element is a children of
       let regex = /list\d+/; //Sets a regex-definition to be used to the selected list.
       let parent = element; //(element.localName === "ul") ? element : element.parentNode;
-      while(!regex.test(parent.className) || parent.localName !== "ul") { //if parent does not contain the id we're looking for, enter loop, also making sure regex matches the lists's id and nor card's id
+      while (!regex.test(parent.className) || parent.localName !== "ul") {
+        //if parent does not contain the id we're looking for, enter loop, also making sure regex matches the lists's id and nor card's id
         parent = parent.parentNode; //climb one "step" up the html structure, loop again
       }
-      return parent.className.match(regex)[0];  //Uses the above regex to identify the selected lists id.
+      return parent.className.match(regex)[0]; //Uses the above regex to identify the selected lists id.
     },
     getCardId: function(element) {
       let regex = /list\d+card\d+/;
       let parent = element;
-      while(!regex.test(parent.id)) {
+      while (!regex.test(parent.id)) {
         parent = parent.parentNode;
       }
       return parent.id.match(regex)[0];
@@ -362,7 +369,7 @@
   function ulListTemp(data) {
     let item = `
       <li>
-      <a href="#${data.id}" class=""navOpserver data-scroll>
+      <a href="#${data.id}" class=""data-scroll>
       </a>
       <span class=" listSpan">${data.name}</span>
     </li>
@@ -508,11 +515,13 @@
           .querySelector(`button[type="submit"]`);
         addCardBtn.addEventListener("click", function(e) {
           e.preventDefault();
-          model.addCard(id, textInput.value, textDescription.value);
-          textInput.value = "";
-          textDescription.value = "";
-          cardHolderDiv.classList.remove(`show`);
-          controller.init();
+          if (textInput.value.length !== 0) {
+            model.addCard(id, textInput.value, textDescription.value);
+            textInput.value = "";
+            textDescription.value = "";
+            cardHolderDiv.classList.remove(`show`);
+            controller.init();
+          }
         });
       },
       removeCard: function(listId) {
@@ -526,7 +535,6 @@
       intersectionObserver: function(t) {
         [...t].map(li => {
           $(`li a[href="#${li.id}"]`).height($(li).height() / 15);
-          console.log();
         });
       }
     }

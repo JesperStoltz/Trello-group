@@ -96,12 +96,21 @@ body {
 }
 #listNav li a {
   width: 30px;
-  display: block;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
   border-radius: 4px;
   background: #17a3b898;
 }
+#listNav li a .line {
+  width: 70%;
+  height: 1px;
+  background: white;
+  display: block;
+}
 #listNav li:hover a {
-  background: #17a2b8;
+  background: #17a3b8;
   transform: translateY(-2px);
   transition: all 0.4s;
 }
@@ -109,7 +118,7 @@ body {
   display: block;
 }
 .navOpserver {
-  background: #17a2b8 !important;
+  background: #17a3b898 !important;
   transform: translateY(-2px);
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);

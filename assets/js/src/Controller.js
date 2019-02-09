@@ -113,11 +113,13 @@ let controller = {
         .querySelector(`button[type="submit"]`);
       addCardBtn.addEventListener("click", function(e) {
         e.preventDefault();
-        model.addCard(id, textInput.value, textDescription.value);
-        textInput.value = "";
-        textDescription.value = "";
-        cardHolderDiv.classList.remove(`show`);
-        controller.init();
+        if (textInput.value.length !== 0) {
+          model.addCard(id, textInput.value, textDescription.value);
+          textInput.value = "";
+          textDescription.value = "";
+          cardHolderDiv.classList.remove(`show`);
+          controller.init();
+        }
       });
     },
     removeCard: function(listId) {
@@ -131,7 +133,6 @@ let controller = {
     intersectionObserver: function(t) {
       [...t].map(li => {
         $(`li a[href="#${li.id}"]`).height($(li).height() / 15);
-        console.log();
       });
     }
   }
