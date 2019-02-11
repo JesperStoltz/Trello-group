@@ -59,4 +59,36 @@ describe("model list's", function() {
     model.removeCard("list1", "list1card2");
     assert.equal(model._lists[1].listItems.length, 2);
   });
+
+  it("should add new card", function() {
+    let options = { year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric" };
+    assert.equal(model._lists.length, 0);
+    model.addNewList();
+    model.addCard("list0", "title", "description");
+    assert.deepStrictEqual(model._lists[0].listItems[0],{
+      id: 'list0card1',
+      text: 'title', 
+      itemDescription: 'description',
+      user: 'userName',
+      date: new Date().toLocaleString("sv-SE", options),
+      itemDescriptionHistory: []
+    });
+  });
+  
+  it("should edit card data", function() {
+    let options = { year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric" };
+    assert.equal(model._lists.length, 0);
+    model.addNewList();
+    model.addCard("list0", "title", "description");
+    model.editCard("new title", "new description", "list0card1", "description");
+    assert.deepStrictEqual(model._lists[0].listItems[0],{
+      id: 'list0card1',
+      text: 'new title', 
+      itemDescription: 'new description',
+      user: 'userName',
+      date: new Date().toLocaleString("sv-SE", options),
+      itemDescriptionHistory: [{ old: 'description', date: new Date().toLocaleString("sv-SE", options), 
+      by: 'userName' }]
+    });
+  });
 });
