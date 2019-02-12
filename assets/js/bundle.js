@@ -13,8 +13,19 @@
           {
             id: "list0card0",
             text: "To-do 1",
-            itemDescription: "",
-            itemDescriptionHistory: [],
+            itemDescription: "new description",
+            itemDescriptionHistory: [
+              {
+                old: "old description",
+                date: "2019-01-03 00:00",
+                by: "user Name"
+              },
+              {
+                old: "oldest description",
+                date: "2019-01-02 00:00",
+                by: "user Name"
+              }
+            ],
             user: "userName",
             date: "2019-01-01 00:00"
           },
@@ -195,8 +206,33 @@
     }
   };
 
+  function descriptionHistory(data, dataIndex, cardId) {
+    let element = `
+   <div class="card">
+     <div class="card-header" id="heading${dataIndex}-${cardId}">
+       <h2 class="mb-0">
+        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse${dataIndex}-${cardId}" aria-expanded="true" aria-controls="collapseOne">
+        Edited By :${data.by} <span>${data.date}</span>
+        </button>
+      </h2>
+    </div>
+    <div id="collapse${dataIndex}-${cardId}" class="collapse " aria-labelledby="heading${dataIndex}-${cardId}" data-parent="#accordionExample">
+      <div class="card-body">
+      ${data.old}
+      </div>
+    </div>
+   </div> 
+   `;
+
+    return element;
+  }
+
+  /*by: "userName"
+  date: "2019-02-09 12:59"
+  old: "" */
+
   function listItemTemp(data) {
-    let item = `<li class="list-group-item mt-1 ${data.id}" draggable="true">
+    return `<li class="list-group-item mt-1 ${data.id}" draggable="true">
                <span class="list-item-name">${data.text}</span>
                <div class="d-block mt-2">
                  <span class="badge badge-pill badge-secondary">${
@@ -236,7 +272,9 @@
                     <div class="modal-header-tooltip">Click to edit</div>
                     <!--start-->
                     <div class="accordion" id="accordion${data.id}">
-                    
+                    ${data.itemDescriptionHistory.map((history, dataIndex) =>
+                      descriptionHistory(history, dataIndex, data.id)
+                    )}
                     </div>
                     <!--end-->
                   </div>
@@ -245,34 +283,13 @@
                   </div>
                 </div>
               </div>
-            </div>
-  `;
-
-    return item;
+            </div>`;
   }
 
-  var itemListView = {
-    init: function(data, target, miniControl) {
-      this.render(data, target, miniControl);
-    },
-    render: function(data, target, miniControl) {
-      data.forEach(element => {
-        miniControl.removeList(element.id);
-        miniControl.renameList(element.id, element.name);
-        miniControl.addCard(element.id, listItemTemp, element.listItemsId);
-        element.listItems.forEach(listItem => {
-          target
-            .querySelector(`#${element.id}`)
-            .querySelector(`.tcards`).innerHTML += listItemTemp(listItem);
-          //console.log(listItem.itemDescriptionHistory);
-          miniControl.removeCard(element.id);
-        });
-      });
-    }
-  };
-
-  function listTemp(data) {
-    let item = `
+  function listTemp(mainData, target) {
+    target.innerHTML = "";
+    mainData.forEach(data => {
+      target.innerHTML += `
   <!--the id of the list-->
   <div class="box col-md-3 border mb-3 p-3 bg-info rounded flex-column d-flex justify-content-between" id="${
     data.id
@@ -306,6 +323,7 @@
         </div>
         <!--Todo List Header + Dropdown Start-->
         <ul class="list-group tcards ${data.id}">
+        ${data.listItems.map(listItem => listItemTemp(listItem))}
         </ul>
       </div>
       <!--add card button start -->
@@ -373,8 +391,7 @@
     </div>
   
   `;
-
-    return item;
+    });
   }
 
   function ulListTemp(data) {
@@ -390,21 +407,19 @@
 
   var view = {
     init: function(data, target, miniControl) {
-      document.getElementById("listNav").innerHTML = this.renderList(data);
-      target.innerHTML = this.render(data);
-      itemListView.init(data, target, miniControl);
+      document.getElementById("listNav").innerHTML = this.renderNavList(data);
+      listTemp(data, target);
+      data.map(element => {
+        miniControl.removeList(element.id);
+        miniControl.renameList(element.id, element.name);
+        miniControl.addCard(element.id, element.listItemsId);
+        miniControl.removeCard(element.id);
+      });
       miniControl.intersectionObserver(
         document.querySelectorAll("#TodoListHolder .box")
       );
     },
-    render: function(data) {
-      let htmlElement = "";
-      data.forEach(element => {
-        htmlElement += listTemp(element);
-      });
-      return htmlElement;
-    },
-    renderList: function(data) {
+    renderNavList: function(data) {
       let ul = "";
       data.forEach(element => {
         ul += ulListTemp(element);
@@ -412,31 +427,6 @@
       return ul;
     }
   };
-
-  function descriptionHistory(data, dataIndex, cardId) {
-    let element = `
-   <div class="card">
-     <div class="card-header" id="heading${dataIndex}-${cardId}">
-       <h2 class="mb-0">
-        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse${dataIndex}-${cardId}" aria-expanded="true" aria-controls="collapseOne">
-        Edited By :${data.by} <span>${data.date}</span>
-        </button>
-      </h2>
-    </div>
-    <div id="collapse${dataIndex}-${cardId}" class="collapse " aria-labelledby="heading${dataIndex}-${cardId}" data-parent="#accordionExample">
-      <div class="card-body">
-      ${data.old}
-      </div>
-    </div>
-   </div> 
-   `;
-
-    return element;
-  }
-
-  /*by: "userName"
-  date: "2019-02-09 12:59"
-  old: "" */
 
   let target = document.getElementById("TodoListHolder");
   let addListBtn = document.getElementById("addList");

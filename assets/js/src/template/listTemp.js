@@ -1,5 +1,8 @@
-export function listTemp(data) {
-  let item = `
+import { listItemTemp } from "./listItemTemp";
+export function listTemp(mainData, target) {
+  target.innerHTML = "";
+  mainData.forEach(data => {
+    target.innerHTML += `
   <!--the id of the list-->
   <div class="box col-md-3 border mb-3 p-3 bg-info rounded flex-column d-flex justify-content-between" id="${
     data.id
@@ -33,6 +36,7 @@ export function listTemp(data) {
         </div>
         <!--Todo List Header + Dropdown Start-->
         <ul class="list-group tcards ${data.id}">
+        ${data.listItems.map(listItem => listItemTemp(listItem))}
         </ul>
       </div>
       <!--add card button start -->
@@ -100,6 +104,5 @@ export function listTemp(data) {
     </div>
   
   `;
-
-  return item;
+  });
 }

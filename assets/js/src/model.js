@@ -10,8 +10,19 @@ export default {
         {
           id: "list0card0",
           text: "To-do 1",
-          itemDescription: "",
-          itemDescriptionHistory: [],
+          itemDescription: "new description",
+          itemDescriptionHistory: [
+            {
+              old: "old description",
+              date: "2019-01-03 00:00",
+              by: "user Name"
+            },
+            {
+              old: "oldest description",
+              date: "2019-01-02 00:00",
+              by: "user Name"
+            }
+          ],
           user: "userName",
           date: "2019-01-01 00:00"
         },

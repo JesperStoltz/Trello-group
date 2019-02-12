@@ -1,5 +1,6 @@
+import descriptionHistory from "./descriptionHistoryTemp";
 export function listItemTemp(data) {
-  let item = `<li class="list-group-item mt-1 ${data.id}" draggable="true">
+  return `<li class="list-group-item mt-1 ${data.id}" draggable="true">
                <span class="list-item-name">${data.text}</span>
                <div class="d-block mt-2">
                  <span class="badge badge-pill badge-secondary">${
@@ -39,7 +40,9 @@ export function listItemTemp(data) {
                     <div class="modal-header-tooltip">Click to edit</div>
                     <!--start-->
                     <div class="accordion" id="accordion${data.id}">
-                    
+                    ${data.itemDescriptionHistory.map((history, dataIndex) =>
+                      descriptionHistory(history, dataIndex, data.id)
+                    )}
                     </div>
                     <!--end-->
                   </div>
@@ -48,8 +51,5 @@ export function listItemTemp(data) {
                   </div>
                 </div>
               </div>
-            </div>
-  `;
-
-  return item;
+            </div>`;
 }
