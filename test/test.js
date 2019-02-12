@@ -60,7 +60,7 @@ describe("model list's", function() {
     assert.equal(model._lists[1].listItems.length, 2);
   });
 
-  it("should add new card", function() {
+  it("can add new card", function() { //jesper & emil-edition
     let options = { year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric" };
     assert.equal(model._lists.length, 0);
     model.addNewList();
@@ -75,7 +75,7 @@ describe("model list's", function() {
     });
   });
   
-  it("should edit card data", function() {
+  it("can edit card data", function() {
     let options = { year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric" };
     assert.equal(model._lists.length, 0);
     model.addNewList();
@@ -91,4 +91,20 @@ describe("model list's", function() {
       by: 'userName' }]
     });
   });
+
+  it('getCardObj returns a card as an object', function () {
+    model.addNewList();
+    model.addCard("list0", "title", "description");
+    assert.ok(typeof model.getCardObj("list0card0"), "object");
+  })
+
+  it('can move an existing card', function () {
+    model.addNewList();
+    model.addNewList();
+    model.addCard("list0", "title", "description");
+    assert.ok(model._lists[0].listItems.length === 1 && model._lists[1].listItems.length === 0);
+    model.moveExistingCard("list1", model.getCardObj("list0card1"));
+    model.removeCard("list0", "list0card1");
+    assert.ok(model._lists[0].listItems.length === 0 && model._lists[1].listItems.length === 1);
+  })
 });

@@ -448,38 +448,31 @@
       let listId;
       let cardId;
 
-      let listGroupItem = Array.from(
-        document.querySelectorAll(".list-group-item")
-      );
+      let listGroupItem = Array.from(document.querySelectorAll(".list-group-item"));
       listGroupItem.map(li => {
         li.addEventListener("dragstart", function() {
           selectedLi = this;
-          listId = controller.getListId(this);
+          listId = controller.getListIdFromClass(this);
           cardId = selectedLi.className.match(/list\d+card\d+/)[0];
           setTimeout(function() {
-            //must be in a timeout or else item hides before it's picked up
             selectedLi.classList.add("d-none");
           }, 1);
         });
       });
 
-      let listItemUls = Array.from(document.querySelectorAll(".tcards"));
-      listItemUls.map(ul => {
-        ul.addEventListener("dragover", function(e) {
+      let lists = Array.from(document.querySelectorAll(".box"));
+      lists.map(list => {
+        list.addEventListener("dragover", function(e) {
           e.preventDefault();
         });
 
-        ul.addEventListener("dragend", function() {
+        list.addEventListener("dragend", function () {
           selectedLi.classList.remove("d-none");
         });
 
-        ul.addEventListener("drop", function() {
-          if (controller.getListId(this) !== listId) {
-            //to not drop in the same list
-            model.moveExistingCard(
-              controller.getListId(this),
-              model.getCardObj(cardId)
-            );
+        list.addEventListener("drop", function(e) {
+          if (controller.getListIdFromId(this) !== listId) {
+            model.moveExistingCard(controller.getListIdFromId(this), model.getCardObj(cardId));
             model.removeCard(listId, cardId);
             controller.init();
           }
@@ -487,28 +480,18 @@
       });
     },
     editCardEvent: function() {
-      let editCardDoneBtns = Array.from(
-        document.querySelectorAll(".editCardDone")
-      );
+      let editCardDoneBtns = Array.from(document.querySelectorAll(".editCardDone"));
       editCardDoneBtns.map(btn => {
         let cardId = controller.getCardId(btn);
         let cardEditUI = document.querySelector(`#${cardId}`);
         let oldValue = "";
-        cardEditUI
-          .querySelector("textarea")
-          .addEventListener("focus", function() {
+        cardEditUI.querySelector("textarea").addEventListener("focus", function() {
             oldValue = this.value;
           });
         btn.addEventListener("click", function(e) {
           let inputName = cardEditUI.querySelector("input");
           let inputDescription = cardEditUI.querySelector("textarea");
-          model.editCard(
-            inputName.value,
-            inputDescription.value,
-            cardId,
-            oldValue
-          );
-          // move this to view?
+          model.editCard(inputName.value, inputDescription.value, cardId, oldValue);
           let listItemName = document.querySelector(`.${cardId} > span`);
           listItemName.textContent = inputName.value;
           cardEditUI.querySelector("#accordion" + cardId).innerHTML = "";
@@ -520,10 +503,8 @@
           oldValue = "";
         });
       });
-      //controller.init();
     },
-    getListId: function(element) {
-      //used from inside list-structure to see which list the element is a children of
+    getListIdFromClass: function(element) { //used from inside list-structure to see which list the element is a children of
       let regex = /list\d+/; //Sets a regex-definition to be used to the selected list.
       let parent = element; //(element.localName === "ul") ? element : element.parentNode;
       while (!regex.test(parent.className) || parent.localName !== "ul") {
@@ -531,6 +512,14 @@
         parent = parent.parentNode; //climb one "step" up the html structure, loop again
       }
       return parent.className.match(regex)[0]; //Uses the above regex to identify the selected lists id.
+    },
+    getListIdFromId(element) {
+      let regex = /list\d+/;
+      let parent = element;
+      while(!regex.test(parent.id)) {
+        parent = parent.parentNode;
+      }
+      return parent.id.match(regex)[0];
     },
     getCardId: function(element) {
       let regex = /list\d+card\d+/;
