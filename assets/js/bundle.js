@@ -207,7 +207,7 @@
   };
 
   function descriptionHistory(data, dataIndex, cardId) {
-    let element = `
+    return `
    <div class="card">
      <div class="card-header" id="heading${dataIndex}-${cardId}">
        <h2 class="mb-0">
@@ -223,8 +223,6 @@
     </div>
    </div> 
    `;
-
-    return element;
   }
 
   /*by: "userName"
@@ -272,9 +270,11 @@
                     <div class="modal-header-tooltip">Click to edit</div>
                     <!--start-->
                     <div class="accordion" id="accordion${data.id}">
-                    ${data.itemDescriptionHistory.map((history, dataIndex) =>
-                      descriptionHistory(history, dataIndex, data.id)
-                    )}
+                    ${data.itemDescriptionHistory
+                      .map((history, dataIndex) =>
+                        descriptionHistory(history, dataIndex, data.id)
+                      )
+                      .join("")}
                     </div>
                     <!--end-->
                   </div>
@@ -323,7 +323,7 @@
         </div>
         <!--Todo List Header + Dropdown Start-->
         <ul class="list-group tcards ${data.id}">
-        ${data.listItems.map(listItem => listItemTemp(listItem))}
+        ${data.listItems.map(listItem => listItemTemp(listItem)).join("")}
         </ul>
       </div>
       <!--add card button start -->

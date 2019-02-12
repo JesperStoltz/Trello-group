@@ -40,9 +40,11 @@ export function listItemTemp(data) {
                     <div class="modal-header-tooltip">Click to edit</div>
                     <!--start-->
                     <div class="accordion" id="accordion${data.id}">
-                    ${data.itemDescriptionHistory.map((history, dataIndex) =>
-                      descriptionHistory(history, dataIndex, data.id)
-                    )}
+                    ${data.itemDescriptionHistory
+                      .map((history, dataIndex) =>
+                        descriptionHistory(history, dataIndex, data.id)
+                      )
+                      .join("")}
                     </div>
                     <!--end-->
                   </div>

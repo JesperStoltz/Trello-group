@@ -1,5 +1,5 @@
 export default function descriptionHistory(data, dataIndex, cardId) {
-  let element = `
+  return `
    <div class="card">
      <div class="card-header" id="heading${dataIndex}-${cardId}">
        <h2 class="mb-0">
@@ -15,8 +15,6 @@ export default function descriptionHistory(data, dataIndex, cardId) {
     </div>
    </div> 
    `;
-
-  return element;
 }
 
 /*by: "userName"

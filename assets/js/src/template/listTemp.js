@@ -36,7 +36,7 @@ export function listTemp(mainData, target) {
         </div>
         <!--Todo List Header + Dropdown Start-->
         <ul class="list-group tcards ${data.id}">
-        ${data.listItems.map(listItem => listItemTemp(listItem))}
+        ${data.listItems.map(listItem => listItemTemp(listItem)).join("")}
         </ul>
       </div>
       <!--add card button start -->
