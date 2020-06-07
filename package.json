@@ -7,16 +7,6 @@
     "build": "node_modules/.bin/rollup assets/js/src/Controller.js --file assets/js/bundle.js --format iife --watch",
     "test": "mocha --require @babel/register"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ultraemme/trello-grupp1.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/ultraemme/trello-grupp1/issues"
-  },
-  "homepage": "https://github.com/ultraemme/trello-grupp1#readme",
   "dependencies": {
     "mocha": "^5.2.0",
     "rollup": "^1.1.0"
